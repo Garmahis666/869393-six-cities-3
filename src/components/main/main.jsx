@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import PlacesList from './../place-card/place-card';
+import PlacesList from './../places-list/places-list.jsx';
 
 export default class Main extends PureComponent {
   render() {
