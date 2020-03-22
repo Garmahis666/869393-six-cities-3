@@ -1,16 +1,33 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import PlacesList from './../places-list/places-list.jsx';
-import Map from './../map/map.jsx';
 import CitiesList from './../cities-list/cities-list.jsx';
-import PlacesFound from './../places-found/places-found.jsx';
-import Sort from './../sort/sort.jsx';
 import {connect} from "react-redux";
 import ActionCreator from './../../reducer/action-creator/action-creator.js';
-import {SortType} from '../../sort-func.js';
+import SortType from '../../consts/sort-type.js';
+import CitiesPlaces from '../cities-places/cities-places.jsx';
+import CitiesNoPlaces from '../cities-no-places/cities-no-places.jsx';
+import {getRand} from './../../utils.js';
+import Operation from './../../reducer/operation/operation.js';
 
 class Main extends PureComponent {
   render() {
+    const {
+      properties,
+      offers,
+      city,
+      onCityClick,
+      sortActiveOption,
+      sortOptions,
+      sortOpened,
+      onSortArrowClick,
+      onSortOptionClick,
+      onClick,
+      onPlaceCardMouseEnter,
+      onPlaceCardMouseLeave,
+    } = this.props;
+    const noPlaces = (city !== `` && properties.length <= 0);
+    const mainClassName = `page__main page__main--index` + (noPlaces ? ` page__main--index-empty` : ``);
+
     return <div className="page page--gray page--main" key="app-main">
       <header className="header">
         <div className="container">
@@ -35,32 +52,28 @@ class Main extends PureComponent {
         </div>
       </header>
 
-      <main className="page__main page__main--index">
+      <main className={mainClassName}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <CitiesList onCityClick={this.props.onCityClick} selectedCity={this.props.city}
-              offers={this.props.offers} sortActiveOption={this.props.sortActiveOption}/>
+            <CitiesList onCityClick={onCityClick} selectedCity={city}
+              offers={offers} sortActiveOption={sortActiveOption}/>
           </section>
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <PlacesFound city={this.props.city} properties={this.props.properties}/>
-              <Sort options={this.props.sortOptions} activeOption={this.props.sortActiveOption}
-                opened={this.props.sortOpened} properties={this.props.properties}
-                onArrowClick={this.props.onSortArrowClick}
-                onOptionClick={this.props.onSortOptionClick}/>
-              <PlacesList key="PlacesList" properties={this.props.properties} onClick={this.props.onClick}
-                onPlaceCardMouseEnter={this.props.onPlaceCardMouseEnter}
-                onPlaceCardMouseLeave={this.props.onPlaceCardMouseLeave}
-              />
-            </section>
-            <div className="cities__right-section">
-              <Map />
-            </div>
-          </div>
+          { noPlaces ?
+            <CitiesNoPlaces city={city} /> :
+            <CitiesPlaces city={city}
+              properties={properties}
+              sortOptions={sortOptions}
+              sortActiveOption={sortActiveOption}
+              sortOpened={sortOpened}
+              onSortArrowClick={onSortArrowClick}
+              onSortOptionClick={onSortOptionClick}
+              onClick={onClick}
+              onPlaceCardMouseEnter={onPlaceCardMouseEnter}
+              onPlaceCardMouseLeave={onPlaceCardMouseLeave} />
+          }
         </div>
       </main>
     </div>;
@@ -69,37 +82,59 @@ class Main extends PureComponent {
   componentDidMount() {
     this.props.loadOffers();
   }
+
+  componentDidUpdate() {
+    if (this.props.city === ``) {
+      const cities = [...new Set(this.props.offers.map((el) => el.city.name))];
+      const city = cities[getRand(cities.length)];
+      this.props.onCityClick(city, SortType.POPULAR, this.props.offers);
+    }
+  }
 }
 
 Main.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    city: PropTypes.string.isRequired,
-    caption: PropTypes.string.isRequired,
-    imgSrc: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    city: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      location: PropTypes.shape({
+        latitude: PropTypes.number.isRequired,
+        longitude: PropTypes.number.isRequired,
+        zoom: PropTypes.number.isRequired,
+      }),
+    }),
+    title: PropTypes.string.isRequired,
+    previewImage: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    priceCurrency: PropTypes.string.isRequired,
-    priceValue: PropTypes.number.isRequired,
-    priceText: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    isPremium: PropTypes.bool.isRequired,
     rating: PropTypes.number.isRequired,
-    coor: PropTypes.shape({
+    location: PropTypes.shape({
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
+      zoom: PropTypes.number.isRequired,
     }),
   })).isRequired,
   properties: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    city: PropTypes.string.isRequired,
-    caption: PropTypes.string.isRequired,
-    imgSrc: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    city: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      location: PropTypes.shape({
+        latitude: PropTypes.number.isRequired,
+        longitude: PropTypes.number.isRequired,
+        zoom: PropTypes.number.isRequired,
+      }),
+    }),
+    title: PropTypes.string.isRequired,
+    previewImage: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    priceCurrency: PropTypes.string.isRequired,
-    priceValue: PropTypes.number.isRequired,
-    priceText: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    isPremium: PropTypes.bool.isRequired,
     rating: PropTypes.number.isRequired,
-    coor: PropTypes.shape({
+    location: PropTypes.shape({
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
+      zoom: PropTypes.number.isRequired,
     }),
   })).isRequired,
   city: PropTypes.string.isRequired,
@@ -114,16 +149,22 @@ Main.propTypes = {
   onPlaceCardMouseEnter: PropTypes.func.isRequired,
   onPlaceCardMouseLeave: PropTypes.func.isRequired,
   activeCard: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    city: PropTypes.string.isRequired,
-    caption: PropTypes.string.isRequired,
-    imgSrc: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    city: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      location: PropTypes.shape({
+        latitude: PropTypes.number.isRequired,
+        longitude: PropTypes.number.isRequired,
+        zoom: PropTypes.number.isRequired,
+      }),
+    }),
+    title: PropTypes.string.isRequired,
+    previewImage: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    priceCurrency: PropTypes.string.isRequired,
-    priceValue: PropTypes.number.isRequired,
-    priceText: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    isPremium: PropTypes.bool.isRequired,
     rating: PropTypes.number.isRequired,
-    coor: PropTypes.shape({
+    location: PropTypes.shape({
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
     }),
@@ -141,11 +182,11 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadOffers: () => dispatch(ActionCreator.loadOffers()),
+  loadOffers: () => dispatch(Operation.loadOffers()),
 
-  onCityClick: (city, sortActiveOption) => {
+  onCityClick: (city, sortActiveOption, offers) => {
     dispatch(ActionCreator.changeCity(city));
-    const getPropertiesAction = ActionCreator.getProperties(city);
+    const getPropertiesAction = ActionCreator.getProperties(city, offers);
     if (sortActiveOption === SortType.POPULAR) {
       dispatch(getPropertiesAction);
     } else {
