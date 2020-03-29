@@ -154,7 +154,7 @@ exports[`Main correctly renders after relaunch 1`] = `
           >
             <article
               className="cities__place-card place-card"
-              id="prop-2"
+              id={1}
               onMouseEnter={[Function]}
               onMouseLeave={[Function]}
             >
@@ -168,7 +168,7 @@ exports[`Main correctly renders after relaunch 1`] = `
                     alt="Place image"
                     className="place-card__image"
                     height="200"
-                    src="img/room.jpg"
+                    src="img/1.png"
                     width="260"
                   />
                 </a>
@@ -186,13 +186,12 @@ exports[`Main correctly renders after relaunch 1`] = `
                       className="place-card__price-value"
                     >
                       €
-                      80
+                      120
                     </b>
                     <span
                       className="place-card__price-text"
                     >
-                      / 
-                      night
+                      / night
                     </span>
                   </div>
                   <button
@@ -224,7 +223,7 @@ exports[`Main correctly renders after relaunch 1`] = `
                     <span
                       style={
                         Object {
-                          "width": "90%",
+                          "width": "4.8%",
                         }
                       }
                     />
@@ -242,13 +241,13 @@ exports[`Main correctly renders after relaunch 1`] = `
                     href="#"
                     onClick={[MockFunction]}
                   >
-                    Wood and stone place
+                    Beautiful & luxurious studio at great location
                   </a>
                 </h2>
                 <p
                   className="place-card__type"
                 >
-                  Private room
+                  apartment
                 </p>
               </div>
             </article>

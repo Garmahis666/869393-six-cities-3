@@ -1,4 +1,4 @@
-import {SortType} from './../../sort-func.js';
+import SortType from './../../consts/sort-type.js';
 
 const initialState = {
   offers: [],
@@ -13,6 +13,7 @@ const initialState = {
   sortActiveOption: SortType.POPULAR,
   sortOpened: false,
   activeCard: null,
+  isAuthorizationRequired: false,
 };
 
 export default initialState;
