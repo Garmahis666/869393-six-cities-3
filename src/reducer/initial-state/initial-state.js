@@ -14,7 +14,9 @@ const initialState = {
   sortOpened: false,
   activeCard: null,
   isAuthorizationRequired: true,
-  user: null
+  user: null,
+  comments: [],
+  favorites: [],
 };
 
 export default initialState;

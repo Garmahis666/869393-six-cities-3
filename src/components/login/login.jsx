@@ -1,5 +1,14 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import {Redirect} from 'react-router-dom';
+import PageHeader from './../page-header/page-header.jsx';
+import {connect} from 'react-redux';
+import Operation from './../../reducer/operation/operation.js';
+import history from './../../history.js';
+import {showError} from './../../utils.js';
+import {Routes} from './../../consts/api.js';
+import Errors from './../../consts/errors.js';
+import {Backgrounds} from './../../consts/style.js';
 
 class Login extends PureComponent {
   constructor(props) {
@@ -7,49 +16,46 @@ class Login extends PureComponent {
 
     this._mapEmail = React.createRef();
     this._mapPassword = React.createRef();
-    this._onLogin = this.onLogin.bind(this);
+    this._handleLogin = this.handleLogin.bind(this);
+    this._handleInputChange = this.handleInputChange.bind(this);
   }
 
-  onLogin(evt) {
+  handleInputChange(evt) {
+    if (evt.target.validity.valid) {
+      evt.target.style = Backgrounds.ERR;
+    } else {
+      evt.target.style = Backgrounds.OK;
+    }
+  }
+
+  handleLogin(evt) {
     evt.preventDefault();
     if (!(this._mapEmail.current && this._mapPassword.current)) {
+      return;
+    }
+
+    if (!this._mapEmail.current.checkValidity() ||
+        !this._mapPassword.current.checkValidity()) {
       return;
     }
 
     const email = this._mapEmail.current.value.trim();
     const password = this._mapPassword.current.value.trim();
 
-    if (email === `` || password === ``) {
-      return;
-    }
-
-    this.props.onLogin(email, password);
+    this.props.onLogin(email, password)
+      .then(() => {
+        history.push(Routes.MAIN);
+      })
+      .catch((err) => showError(err, Errors.ERR_LOGIN));
   }
 
   render() {
+    if (this.props.user) {
+      return <Redirect to={Routes.MAIN}/>;
+    }
+
     return <div className="page page--gray page--login">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <a className="header__logo-link" href="main.html">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"></img>
-              </a>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__login">Sign in</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <PageHeader user={this.props.user} />
       <main className="page__main page__main--login">
         <div className="page__login-container container">
           <section className="login">
@@ -57,13 +63,15 @@ class Login extends PureComponent {
             <form className="login__form form" action="#" method="post">
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
-                <input className="login__input form__input" ref={this._mapEmail} type="email" name="email" placeholder="Email" required=""></input>
+                <input className="login__input form__input" ref={this._mapEmail} type="email" name="email" placeholder="Email" required
+                  onChange={this._handleInputChange}></input>
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
-                <input className="login__input form__input" ref={this._mapPassword} type="password" name="password" placeholder="Password" required=""></input>
+                <input className="login__input form__input" ref={this._mapPassword} type="password" name="password" placeholder="Password" required
+                  onChange={this._handleInputChange}></input>
               </div>
-              <button className="login__submit form__submit button" type="submit" onClick={this._onLogin}>Sign in</button>
+              <button className="login__submit form__submit button" type="submit" onClick={this._handleLogin}>Sign in</button>
             </form>
           </section>
           <section className="locations locations--login locations--current">
@@ -81,6 +89,25 @@ class Login extends PureComponent {
 
 Login.propTypes = {
   onLogin: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    email: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    avatarUrl: PropTypes.string.isRequired,
+    isPro: PropTypes.bool.isRequired
+  }),
 };
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  onLogin: (email, password) => {
+    return dispatch(Operation.login(email, password));
+  }
+});
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  user: state.user,
+});
+
+const LoginWrapped = connect(mapStateToProps, mapDispatchToProps)(Login);
+export {Login};
+export default LoginWrapped;

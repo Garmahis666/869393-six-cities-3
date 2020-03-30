@@ -1,18 +1,14 @@
-import {getPropertiesByCity} from './../../utils.js';
-import SortType from './../../consts/sort-type.js';
-import {sortPropertiesByOption} from '../../utils.js';
-
 import {
   LOAD_OFFERS,
   CHANGE_CITY,
-  GET_PROPERTIES,
   SORT_OPEN_TOGGLE,
   SORT_ACTIVE_OPTION_CHANGE,
-  SORT_PROPERTIES,
   ACTIVATE_CARD,
   REQUIRED_AUTHORIZATION,
   SAVE_USER,
   REMOVE_USER,
+  LOAD_COMMENTS,
+  LOAD_FAVORITES,
 } from './../action-type/action-type.js';
 
 const ActionCreator = {
@@ -50,13 +46,6 @@ const ActionCreator = {
     };
   },
 
-  getProperties: (city, offers) => {
-    return {
-      type: GET_PROPERTIES,
-      payload: getPropertiesByCity(city, offers)
-    };
-  },
-
   sortOpenToggle: (opened) => {
     return {
       type: SORT_OPEN_TOGGLE,
@@ -71,20 +60,27 @@ const ActionCreator = {
     };
   },
 
-  sortProperties: (option, properties, offers) => {
-    return {
-      type: SORT_PROPERTIES,
-      payload: option === SortType.POPULAR && properties.length > 0 ?
-        getPropertiesByCity(properties[0].city, offers) : sortPropertiesByOption(option, properties)
-    };
-  },
-
   activateCard: (card) => {
     return {
       type: ACTIVATE_CARD,
       payload: card
     };
-  }
+  },
+
+  loadComments: (comments) => {
+    const sortedComments = comments.sort((c1, c2) => (new Date(c2.date)).getTime() - (new Date(c1.date)).getTime());
+    return {
+      type: LOAD_COMMENTS,
+      payload: sortedComments
+    };
+  },
+
+  loadFavorites: (favorites) => {
+    return {
+      type: LOAD_FAVORITES,
+      payload: favorites
+    };
+  },
 };
 
 export default ActionCreator;

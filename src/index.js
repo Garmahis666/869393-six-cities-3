@@ -7,6 +7,11 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {compose} from 'recompose';
 import configureAPI from './api.js';
+import {Router} from 'react-router-dom';
+import history from './history';
+import Operation from './reducer/operation/operation.js';
+import {showError} from './utils.js';
+import Errors from './consts/errors.js';
 
 const init = () => {
   const api = configureAPI((...args) => store.dispatch(...args));
@@ -17,9 +22,14 @@ const init = () => {
           window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f)
   );
 
+  store.dispatch(Operation.checkLogin());
+  store.dispatch(Operation.loadOffers()).catch((err) => showError(err, Errors.ERR_LOAD_HOTELS));
+
   ReactDOM.render(
       <Provider store={store}>
-        <App />
+        <Router history={history}>
+          <App store={store}/>
+        </Router>
       </Provider>,
       document.querySelector(`#root`)
   );

@@ -19,7 +19,11 @@ module.exports = {
         use: {
           loader: `babel-loader`,
         },
-      }
+      },
+      {
+        test: /\.(min\.)?css$/,
+        use: [`style-loader`, `css-loader`],
+      },
     ],
   },
   devtool: `source-map`,
