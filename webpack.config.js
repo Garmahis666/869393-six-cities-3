@@ -1,3 +1,4 @@
+
 const path = require(`path`);
 
 module.exports = {
@@ -7,8 +8,10 @@ module.exports = {
     path: path.join(__dirname, `public`)
   },
   devServer: {
+    historyApiFallback: true,
     contentBase: path.join(__dirname, `public`),
-    open: false,
+    compress: false,
+    open: true,
     port: 1337,
   },
   module: {
@@ -26,5 +29,5 @@ module.exports = {
       },
     ],
   },
-  devtool: `source-map`,
+  devtool: `source-map`
 };
