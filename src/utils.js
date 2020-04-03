@@ -22,12 +22,12 @@ const getRand = (num) => {
 };
 
 const getPropertiesByCity = (city, offers) => {
-  return offers.filter((el) => el.city.name === city)
+  return offers.filter((element) => element.city.name === city)
                .slice();
 };
 
 const getPropertyById = (offers, id) => {
-  const properties = offers.filter((el) => el.id === id);
+  const properties = offers.filter((element) => element.id === id);
   return properties.length > 0 ? properties[0] : null;
 };
 
@@ -39,21 +39,21 @@ const convertRawUserData = (data) => {
 };
 
 const convertRawOffersData = (data) => {
-  data.forEach((el, i) => {
-    data[i] = Object.assign({}, el, {
-      previewImage: el[`preview_image`],
-      isFavorite: el[`is_favorite`],
-      isPremium: el[`is_premium`],
-      host: convertRawUserData(el.host),
+  data.forEach((element, i) => {
+    data[i] = Object.assign({}, element, {
+      previewImage: element[`preview_image`],
+      isFavorite: element[`is_favorite`],
+      isPremium: element[`is_premium`],
+      host: convertRawUserData(element.host),
     });
   });
   return data;
 };
 
 const convertRawCommentData = (data) => {
-  data.forEach((el, i) => {
-    data[i] = Object.assign({}, el, {
-      user: convertRawUserData(el.user),
+  data.forEach((element, i) => {
+    data[i] = Object.assign({}, element, {
+      user: convertRawUserData(element.user),
     });
   });
   return data;

@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import {ReviewList} from './review-list';
 import reviewItem from './../../mocks/review-item.js';
 
-jest.mock(`./../review-add/review-add.jsx`, () => jest.fn().mockReturnValue(null));
+jest.mock(`./../review-form/review-form.jsx`, () => jest.fn().mockReturnValue(null));
 
 it(`ReviewList correctly renders after relaunch`, () => {
   const tree = renderer

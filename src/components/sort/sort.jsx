@@ -18,9 +18,9 @@ const Sort = ({options, activeOption, opened, properties, onArrowClick, onOption
     </span>
     <ul className={css}>
       {
-        options.map((el) => <li key={el}
-          className={`places__option` + (el === activeOption ? ` places__option--active` : ``)}
-          tabIndex="0" onClick={() => onOptionClick(el, properties)}>{el}
+        options.map((element) => <li key={element}
+          className={`places__option` + (element === activeOption ? ` places__option--active` : ``)}
+          tabIndex="0" onClick={() => onOptionClick(element, properties)}>{element}
         </li>)
       }
     </ul>

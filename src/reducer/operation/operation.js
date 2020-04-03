@@ -51,7 +51,7 @@ const Operation = {
 
   toggleFavorite: (favorites, hotelId, status) => {
     return (dispatch, _, _api) => {
-      let hotel = favorites.find((el) => el.id === hotelId);
+      let hotel = favorites.find((element) => element.id === hotelId);
       if (hotel) {
         hotel.isFavorite = (status === 1);
         dispatch(ActionCreator.loadFavorites(favorites.slice()));

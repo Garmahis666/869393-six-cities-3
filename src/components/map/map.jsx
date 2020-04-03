@@ -36,9 +36,9 @@ class Map extends PureComponent {
 
   getMarkers() {
     const activeCardId = this.props.activeCard ? this.props.activeCard.id : NaN;
-    const markers = Array.from(this.props.properties.map((el) => {
-      const icon = (el.id === activeCardId ? this._iconActive : this._icon);
-      return leaflet.marker([el.location.latitude, el.location.longitude], {icon});
+    const markers = Array.from(this.props.properties.map((element) => {
+      const icon = (element.id === activeCardId ? this._iconActive : this._icon);
+      return leaflet.marker([element.location.latitude, element.location.longitude], {icon});
     }));
     return markers;
   }

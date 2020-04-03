@@ -5,12 +5,12 @@ import {
   MIN_COMMENT_LENGTH,
   MAX_COMMENT_LENGTH
 } from '../../consts/constraints.js';
-import Operation from './../../reducer/operation/operation.js';
-import {showError} from './../../utils.js';
-import Errors from './../../consts/errors.js';
-import {Widths, Heights} from './../../consts/style.js';
+import Operation from '../../reducer/operation/operation.js';
+import {showError} from '../../utils.js';
+import Errors from '../../consts/errors.js';
+import {Widths, Heights} from '../../consts/style.js';
 
-class ReviewAdd extends PureComponent {
+class ReviewForm extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -123,7 +123,7 @@ class ReviewAdd extends PureComponent {
   }
 }
 
-ReviewAdd.propTypes = {
+ReviewForm.propTypes = {
   hotelId: PropTypes.number.isRequired,
   onAddComment: PropTypes.func.isRequired,
 };
@@ -134,6 +134,6 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-const ReviewAddWrapped = connect(null, mapDispatchToProps)(ReviewAdd);
-export {ReviewAdd};
+const ReviewAddWrapped = connect(null, mapDispatchToProps)(ReviewForm);
+export {ReviewForm};
 export default ReviewAddWrapped;

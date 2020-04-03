@@ -177,7 +177,7 @@ Property.propTypes = {
 
 const getNearbyProperties = (property, offers) => {
   const properties = getPropertiesByCity(property.city.name, offers);
-  const propertiesExceptCurrent = properties.filter((el) => el.id !== property.id);
+  const propertiesExceptCurrent = properties.filter((element) => element.id !== property.id);
   return getNearbyPlaces(propertiesExceptCurrent, property, MAX_NEARBY_PLACES);
 };
 

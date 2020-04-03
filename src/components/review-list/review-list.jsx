@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import ReviewItem from './../review-item/review-item.jsx';
-import ReviewAdd from './../review-add/review-add.jsx';
+import ReviewForm from './../review-form/review-form.jsx';
 import {MAX_COMMENTS_NUMBER} from '../../consts/constraints.js';
 
 const ReviewList = ({hotelId, comments, isAuthorizationRequired}) => {
@@ -14,7 +14,7 @@ const ReviewList = ({hotelId, comments, isAuthorizationRequired}) => {
     <ul className="reviews__list">
       {viewComments.map((el, i) => <ReviewItem review={el} key={i}/>)}
     </ul>
-    {isAuthorizationRequired ? null : <ReviewAdd hotelId={hotelId}/>}
+    {isAuthorizationRequired ? null : <ReviewForm hotelId={hotelId}/>}
   </section>;
 };
 ReviewList.propTypes = {

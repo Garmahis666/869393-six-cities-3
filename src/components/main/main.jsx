@@ -64,7 +64,7 @@ class Main extends PureComponent {
 
   selectRandomCity() {
     if (this.props.city === `` && this.props.offers.length > 0) {
-      const cities = [...new Set(this.props.offers.map((el) => el.city.name))];
+      const cities = [...new Set(this.props.offers.map((element) => element.city.name))];
       const city = cities[getRand(cities.length)];
       this.props.onCityClick(city);
     }
