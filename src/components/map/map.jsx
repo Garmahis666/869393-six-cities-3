@@ -25,24 +25,6 @@ class Map extends PureComponent {
     });
   }
 
-  render() {
-    return <section ref={this._mapRef} className={`${this.props.mapClass} map`} id="map">
-    </section>;
-  }
-
-  get currentCity() {
-    return this.props.properties[0].city;
-  }
-
-  getMarkers() {
-    const activeCardId = this.props.activeCard ? this.props.activeCard.id : NaN;
-    const markers = Array.from(this.props.properties.map((element) => {
-      const icon = (element.id === activeCardId ? this._iconActive : this._icon);
-      return leaflet.marker([element.location.latitude, element.location.longitude], {icon});
-    }));
-    return markers;
-  }
-
   componentDidMount() {
     this._chosenCity = this.currentCity;
     const {latitude, longitude, zoom} = this.currentCity.location;
@@ -77,6 +59,24 @@ class Map extends PureComponent {
       const {latitude, longitude, zoom} = this.currentCity.location;
       this._map.setView([latitude, longitude], zoom);
     }
+  }
+
+  getMarkers() {
+    const activeCardId = this.props.activeCard ? this.props.activeCard.id : NaN;
+    const markers = Array.from(this.props.properties.map((element) => {
+      const icon = (element.id === activeCardId ? this._iconActive : this._icon);
+      return leaflet.marker([element.location.latitude, element.location.longitude], {icon});
+    }));
+    return markers;
+  }
+
+  get currentCity() {
+    return this.props.properties[0].city;
+  }
+
+  render() {
+    return <section ref={this._mapRef} className={`${this.props.mapClass} map`} id="map">
+    </section>;
   }
 }
 

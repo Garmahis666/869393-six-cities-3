@@ -32,19 +32,6 @@ class Property extends PureComponent {
     this.props.onAddToFavorite(this.props.property.id, this.props.property.isFavorite ? 0 : 1);
   }
 
-  render() {
-    return <div className="page">
-      <PageHeader user={this.props.user}/>
-      <main className="page__main page__main--property">
-        <section className="property">
-          {this.renderProperty()}
-          <Map mapClass="property__map" properties={this.props.mapProperties}/>
-          {this.renderNearbyProperties()}
-        </section>
-      </main>
-    </div>;
-  }
-
   renderNearbyProperties() {
     return <div className="container">
       <section className="near-places places">
@@ -64,9 +51,9 @@ class Property extends PureComponent {
       <div className="property__gallery-container container">
         <div className="property__gallery">
           {
-            property.images.slice(0, MAX_IMAGE_COUNT).map((el, i) =>
+            property.images.slice(0, MAX_IMAGE_COUNT).map((element, i) =>
               <div className="property__image-wrapper" key={i}>
-                <img className="property__image" src={el} alt="Photo studio"></img>
+                <img className="property__image" src={element} alt="Photo studio"></img>
               </div>
             )
           }
@@ -120,9 +107,9 @@ class Property extends PureComponent {
           <div className="property__inside">
             <h2 className="property__inside-title">What&apos;s inside</h2>
             <ul className="property__inside-list">
-              {property.goods.map((el, i) =>
+              {property.goods.map((element, i) =>
                 <li className="property__inside-item" key={i}>
-                  {el}
+                  {element}
                 </li>
               )}
             </ul>
@@ -163,6 +150,19 @@ class Property extends PureComponent {
 
   renderComments() {
     return <ReviewList hotelId={this.props.id}/>;
+  }
+
+  render() {
+    return <div className="page">
+      <PageHeader user={this.props.user}/>
+      <main className="page__main page__main--property">
+        <section className="property">
+          {this.renderProperty()}
+          <Map mapClass="property__map" properties={this.props.mapProperties}/>
+          {this.renderNearbyProperties()}
+        </section>
+      </main>
+    </div>;
   }
 }
 

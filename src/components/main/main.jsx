@@ -14,8 +14,20 @@ import {
 } from './../../utils.js';
 
 class Main extends PureComponent {
-  render() {
-    return this.renderMainPage();
+  componentDidMount() {
+    this.selectRandomCity();
+  }
+
+  componentDidUpdate() {
+    this.selectRandomCity();
+  }
+
+  selectRandomCity() {
+    if (this.props.city === `` && this.props.offers.length > 0) {
+      const cities = [...new Set(this.props.offers.map((element) => element.city.name))];
+      const city = cities[getRand(cities.length)];
+      this.props.onCityClick(city);
+    }
   }
 
   renderMainPage() {
@@ -62,20 +74,8 @@ class Main extends PureComponent {
     </div>;
   }
 
-  selectRandomCity() {
-    if (this.props.city === `` && this.props.offers.length > 0) {
-      const cities = [...new Set(this.props.offers.map((element) => element.city.name))];
-      const city = cities[getRand(cities.length)];
-      this.props.onCityClick(city);
-    }
-  }
-
-  componentDidMount() {
-    this.selectRandomCity();
-  }
-
-  componentDidUpdate() {
-    this.selectRandomCity();
+  render() {
+    return this.renderMainPage();
   }
 }
 

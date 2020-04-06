@@ -12,7 +12,7 @@ const ReviewList = ({hotelId, comments, isAuthorizationRequired}) => {
       <span className="reviews__amount">{comments.length}</span>
     </h2>
     <ul className="reviews__list">
-      {viewComments.map((el, i) => <ReviewItem review={el} key={i}/>)}
+      {viewComments.map((element, i) => <ReviewItem review={element} key={i}/>)}
     </ul>
     {isAuthorizationRequired ? null : <ReviewForm hotelId={hotelId}/>}
   </section>;
